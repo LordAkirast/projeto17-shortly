@@ -18,14 +18,11 @@ const createGame = Joi.object({
 
 
 app.post("/signup"), async (req,res) => {
-    {
-        name: "João",
-      email: "joao@driven.com.br",
-      password: "driven",
-      confirmPassword: "driven"
-    }
 
     const {name, email, password, confirmPassword} = req.body
+
+
+    
 }
 
 
