@@ -4,16 +4,32 @@ import cors from "cors"
 import Joi from "joi"
 import dayjs from "dayjs"
 
-
-
 const app = express()
 app.use(cors())
 app.use(express.json())
+
+
 
 const createGame = Joi.object({
     stockTotal: Joi.number().required(),
     pricePerDay: Joi.number().required(),
 });
+
+
+
+app.post("/signup"), async (req,res) => {
+    {
+        name: "João",
+      email: "joao@driven.com.br",
+      password: "driven",
+      confirmPassword: "driven"
+    }
+
+    const {name, email, password, confirmPassword} = req.body
+}
+
+
+
 
 
 const port = process.env.PORT || 5000
