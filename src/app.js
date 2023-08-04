@@ -21,7 +21,7 @@ const createdAt = dayjs().format('YYYY-MM-DD HH:mm:ss');
 
 
 
-app.post("/signup"), async (req, res) => {
+app.post('/signup', async (req, res) => {
 
     const { name, email, password, confirmPassword } = req.body
 
@@ -44,11 +44,11 @@ app.post("/signup"), async (req, res) => {
 
     try {
 
-        userVerify = await db.query('SELECT * FROM USERS where email = $1', [email]);
-        if (userVerify) {
+        const userVerify = await db.query('SELECT * FROM USERS where email = $1', [email]);
+        if (userVerify.rows.length > 0) {
             return res.status(409).send('Email já cadastrado!')
         } else {
-            user = await db.query('INSERT INTO USERS (name, email, password, "createdAt") values ($1, $2, $3, $4, $5);', [name, email, passCrypt, createdAt]);
+            const user = await db.query('INSERT INTO USERS (name, email, password, "createdat") values ($1, $2, $3, $4);', [name, email, passCrypt, createdAt]);
             return res.status(201).send('Usuário criado!')
         }
     } catch (err) {
@@ -57,7 +57,11 @@ app.post("/signup"), async (req, res) => {
 
 
 
-}
+})
+
+app.post('/teste', async (req,res) => {
+    return res.status(200).send('Sucesso')
+})
 
 
 
