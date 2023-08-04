@@ -35,7 +35,7 @@ app.post('/signup', async (req, res) => {
     }
 
     if (password !== confirmPassword) {
-        return res.status(400).send('A senha e a confirmaçao de senha devem ser iguais.')
+        return res.status(422).send('A senha e a confirmaçao de senha devem ser iguais.')
     }
 
     //encriptação
