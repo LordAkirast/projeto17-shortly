@@ -169,8 +169,8 @@ app.post('/urls/shorten', async (req, res) => {
     }
 
     try {
-        const insertURL = await db.query('INSERT INTO urls (url) values ($1);', [shortUrl])
-        const selectURL = await db.query('SELECT * FROM urls where url = $1;', [shortUrl])
+        const insertURL = await db.query('INSERT INTO urls (url, "createdat", "shortUrl" ) values ($1, $2, $3);', [url, shortId, createdAt])
+        const selectURL = await db.query('SELECT * FROM urls where url = $1;', [url])
         return res.status(201).send(selectURL.rows[0])
 
        
