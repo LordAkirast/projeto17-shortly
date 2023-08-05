@@ -25,13 +25,13 @@ const loginUser = Joi.object({
     password: Joi.string().required(),
 });
 
+let token = "";
 
 const createdAt = dayjs().format('YYYY-MM-DD HH:mm:ss');
 
 // Middleware para adicionar o header "Authorization" com o token
 const addAuthorizationHeader = (req, res, next) => {
-    // Aqui você pode verificar se o usuário já está autenticado e obter o token
-    // Vou usar um token de exemplo gerado com uuidv4 para fins de demonstração
+
     const token = uuid()
   
     // Adicione o token no header "Authorization" no formato "Bearer TOKEN"
@@ -103,7 +103,7 @@ app.post('/signin', async (req, res) => {
 
             if (decrypt === true) {
                 console.log('Usuário logado!')
-                let token = uuid()
+                token = uuid()
                 console.log(token)
                 return res.status(200).send(({ token: token }))
             } else {
@@ -134,21 +134,44 @@ app.post('/urls/shorten', async (req, res) => {
     const shortUrl = url + shortId;
 
 
-
-    const validation = loginUser.validate({ email, password }, { abortEarly: "False" })
-    if (validation.error) {
-        console.log("erro 1 - signin")
-        const errors = validation.error.details.map((detail) => detail.message)
-        return res.status(422).send(errors);
+    if(!token) {
+        return res.status(403).send('Precisa ter o token.')
     }
+
+    
 
     if (!url) {
         return res.status(422).send('URL precisa ser preenchida!');
     }
 
+    if (!url.includes('h')) {
+        return res.status(422).send('URL precisa ter o formato HTTPS!');
+    }
+
+    if (!url.includes('t')) {
+        return res.status(422).send('URL precisa ter o formato HTTPS!');
+    }
+
+    if (!url.includes('p')) {
+        return res.status(422).send('URL precisa ter o formato HTTPS!');
+    }
+
+    if (!url.includes('s')) {
+        return res.status(422).send('URL precisa ter o formato HTTPS!');
+    }
+
+    if (!url.includes(':')) {
+        return res.status(422).send('URL precisa ter o formato HTTPS!');
+    }
+
+    if (!url.includes('/')) {
+        return res.status(422).send('URL precisa ter o formato HTTPS!');
+    }
+
     try {
-        insertURL = await db.query('INSERT INTO urls (url) values ($1);', [shortUrl])
-        return res.status(201).send('URL encurtada!')
+        const insertURL = await db.query('INSERT INTO urls (url) values ($1);', [shortUrl])
+        const selectURL = await db.query('SELECT * FROM urls where url = $1;', [shortUrl])
+        return res.status(201).send(selectURL.rows[0])
 
        
     } catch (err) {
