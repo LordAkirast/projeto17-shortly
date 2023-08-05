@@ -26,7 +26,8 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.urls (
     id integer NOT NULL,
-    url text NOT NULL
+    url text NOT NULL,
+    createdat timestamp without time zone DEFAULT now()
 );
 
 
@@ -101,6 +102,11 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 -- Data for Name: urls; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+INSERT INTO public.urls VALUES (1, 'Lorena39@hotmail.comiSgSfCwC', '2023-08-05 17:15:22.376175');
+INSERT INTO public.urls VALUES (2, 'Lorena39@hotmail.com-PA4S6dE', '2023-08-05 17:15:22.376175');
+INSERT INTO public.urls VALUES (3, 'Lorena39@hotmail.comGMVMHOo4', '2023-08-05 17:15:22.376175');
+INSERT INTO public.urls VALUES (4, 'Lorena39@hotmail.comM47KMUmv', '2023-08-05 17:15:22.376175');
+INSERT INTO public.urls VALUES (5, 'https:/Lorena39@hotmail.comPrRrWyOS', '2023-08-05 17:15:22.376175');
 
 
 --
@@ -115,7 +121,7 @@ INSERT INTO public.users VALUES (2, 'Isabel Oliveira', 'Lorena39@hotmail.com', '
 -- Name: urls_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.urls_id_seq', 1, false);
+SELECT pg_catalog.setval('public.urls_id_seq', 5, true);
 
 
 --
