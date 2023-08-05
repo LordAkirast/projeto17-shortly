@@ -93,11 +93,11 @@ app.post('/signin', async (req, res) => {
                 return res.status(200).send(({ token: token }))
             } else {
                 console.log('senha incorreta')
-                return res.status(400).send('Senha incorreta!')
+                return res.status(401).send('Senha incorreta!')
             }
         } else {
             console.log('email incorreto')
-            return res.status(400).send('email incorreto!')
+            return res.status(401).send('email incorreto!')
         }
     } catch (err) {
         return res.status(500).send(err.message)
