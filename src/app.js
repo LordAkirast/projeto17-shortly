@@ -5,6 +5,8 @@ import Joi from "joi"
 import dayjs from "dayjs"
 import bcrypt from "bcrypt"
 import { v4 as uuid } from 'uuid'
+import { nanoid } from 'nanoid';
+
 
 const app = express()
 app.use(cors())
@@ -25,6 +27,19 @@ const loginUser = Joi.object({
 
 
 const createdAt = dayjs().format('YYYY-MM-DD HH:mm:ss');
+
+// Middleware para adicionar o header "Authorization" com o token
+const addAuthorizationHeader = (req, res, next) => {
+    // Aqui você pode verificar se o usuário já está autenticado e obter o token
+    // Vou usar um token de exemplo gerado com uuidv4 para fins de demonstração
+    const token = uuid()
+  
+    // Adicione o token no header "Authorization" no formato "Bearer TOKEN"
+    req.headers.authorization = `Bearer ${token}`;
+  
+    // Chame o próximo middleware ou rota
+    next();
+  };
 
 
 
@@ -88,7 +103,7 @@ app.post('/signin', async (req, res) => {
 
             if (decrypt === true) {
                 console.log('Usuário logado!')
-                const token = uuid()
+                let token = uuid()
                 console.log(token)
                 return res.status(200).send(({ token: token }))
             } else {
@@ -99,6 +114,43 @@ app.post('/signin', async (req, res) => {
             console.log('email incorreto')
             return res.status(401).send('email incorreto!')
         }
+    } catch (err) {
+        return res.status(500).send(err.message)
+    }
+
+
+
+})
+
+
+app.use(addAuthorizationHeader);
+
+
+app.post('/urls/shorten', async (req, res) => {
+
+    const { url } = req.body
+
+    const shortId = nanoid(8);
+    const shortUrl = url + shortId;
+
+
+
+    const validation = loginUser.validate({ email, password }, { abortEarly: "False" })
+    if (validation.error) {
+        console.log("erro 1 - signin")
+        const errors = validation.error.details.map((detail) => detail.message)
+        return res.status(422).send(errors);
+    }
+
+    if (!url) {
+        return res.status(422).send('URL precisa ser preenchida!');
+    }
+
+    try {
+        insertURL = await db.query('INSERT INTO urls (url) values ($1);', [shortUrl])
+        return res.status(201).send('URL encurtada!')
+
+       
     } catch (err) {
         return res.status(500).send(err.message)
     }
