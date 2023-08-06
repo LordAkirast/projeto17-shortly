@@ -12,6 +12,9 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
+///sudo su -c "pg_dump shortly --inserts --no-owner" postgres > dump.sql
+
+
 
 
 const createUser = Joi.object({
