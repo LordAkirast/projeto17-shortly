@@ -33,13 +33,13 @@ const createdAt = dayjs().format('YYYY-MM-DD HH:mm:ss');
 const addAuthorizationHeader = (req, res, next) => {
 
     const token = uuid()
-  
+
     // Adicione o token no header "Authorization" no formato "Bearer TOKEN"
     req.headers.authorization = `Bearer ${token}`;
-  
+
     // Chame o próximo middleware ou rota
     next();
-  };
+};
 
 
 
@@ -134,11 +134,11 @@ app.post('/urls/shorten', async (req, res) => {
     const shortUrl = url + shortId;
 
 
-    if(!token) {
+    if (!token) {
         return res.status(401).send('Precisa ter o token.')
     }
 
-    
+
 
     if (!url) {
         return res.status(422).send('URL precisa ser preenchida!');
@@ -171,9 +171,14 @@ app.post('/urls/shorten', async (req, res) => {
     try {
         const insertURL = await db.query('INSERT INTO urls (url, "createdat", shorturl ) values ($1, $2, $3);', [url, createdAt, shortId])
         const selectURL = await db.query('SELECT * FROM urls where url = $1;', [url])
-        return res.status(201).send(selectURL.rows[0].shortId)
+        const objectReturn = {
+            id: selectURL.rows[0].id,
+            shorturl: selectURL.rows[0].shorturl
+        };
 
-       
+        return res.status(201).send(objectReturn)
+
+
     } catch (err) {
         return res.status(500).send(err.message)
     }
