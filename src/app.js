@@ -137,9 +137,9 @@ app.post('/urls/shorten', async (req, res) => {
     const shortUrl = url + shortId;
 
 
-    // if (!token) {
-    //     return res.status(401).send('Precisa ter o token.')
-    // }
+    if (!token) {
+        return res.status(401).send('Precisa ter o token.')
+    }
 
 
 
