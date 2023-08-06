@@ -28,7 +28,7 @@ CREATE TABLE public.urls (
     id integer NOT NULL,
     url text NOT NULL,
     createdat timestamp without time zone DEFAULT now(),
-    shorturl text
+    "shortUrl" text
 );
 
 
@@ -108,6 +108,12 @@ INSERT INTO public.urls VALUES (2, 'Lorena39@hotmail.com-PA4S6dE', '2023-08-05 1
 INSERT INTO public.urls VALUES (3, 'Lorena39@hotmail.comGMVMHOo4', '2023-08-05 17:15:22.376175', NULL);
 INSERT INTO public.urls VALUES (4, 'Lorena39@hotmail.comM47KMUmv', '2023-08-05 17:15:22.376175', NULL);
 INSERT INTO public.urls VALUES (5, 'https:/Lorena39@hotmail.comPrRrWyOS', '2023-08-05 17:15:22.376175', NULL);
+INSERT INTO public.urls VALUES (6, 'https:/Lorena39@hotmail.com', '2023-08-06 03:03:21', NULL);
+INSERT INTO public.urls VALUES (7, 'https:/Lorena39@hotmail.com', '2023-08-06 03:06:42', 'puVdmqJD');
+INSERT INTO public.urls VALUES (8, 'https:/Lorena39@hotmail.com', '2023-08-06 03:07:34', 'pv8G0vzQ');
+INSERT INTO public.urls VALUES (9, 'https:/Lorena39@hotmail.com', '2023-08-06 13:43:47', 'lvdPzCsh');
+INSERT INTO public.urls VALUES (10, 'https:/Lorena39@hotmail.com', '2023-08-06 14:02:54', 'mtwWrmSF');
+INSERT INTO public.urls VALUES (11, 'https:/Lorena39@hotmail.com', '2023-08-06 14:07:15', 'EfEjgvXu');
 
 
 --
@@ -122,7 +128,7 @@ INSERT INTO public.users VALUES (2, 'Isabel Oliveira', 'Lorena39@hotmail.com', '
 -- Name: urls_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.urls_id_seq', 5, true);
+SELECT pg_catalog.setval('public.urls_id_seq', 11, true);
 
 
 --
