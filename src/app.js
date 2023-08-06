@@ -172,7 +172,7 @@ app.post('/urls/shorten', async (req, res) => {
         const selectURL = await db.query('SELECT * FROM urls where url = $1;', [url])
         const objectReturn = {
             id: selectURL.rows[0].id,
-            shorturl: selectURL.rows[0].shorturl
+            shortUrl: selectURL.rows[0].shortUrl
         };
 
         return res.status(201).send(objectReturn)
