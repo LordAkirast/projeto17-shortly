@@ -134,12 +134,12 @@ app.post('/urls/shorten', async (req, res) => {
     const { url } = req.body
 
     const shortId = nanoid(8);
-    const shortUrl = url + shortId;
+    ///const shortUrl1 = url + shortId;
 
 
-    if (!token) {
-        return res.status(401).send('Precisa ter o token.')
-    }
+    // if (!token) {
+    //     return res.status(401).send('Precisa ter o token.')
+    // }
 
 
 
@@ -168,7 +168,7 @@ app.post('/urls/shorten', async (req, res) => {
     }
 
     try {
-        const insertURL = await db.query('INSERT INTO urls (url, "createdat", "shorturl" ) values ($1, $2, $3);', [url, createdAt, shortId])
+        const insertURL = await db.query('INSERT INTO urls (url, "createdat", "shortUrl" ) values ($1, $2, $3);', [url, createdAt, shortId])
         const selectURL = await db.query('SELECT * FROM urls where url = $1;', [url])
         const objectReturn = {
             id: selectURL.rows[0].id,
