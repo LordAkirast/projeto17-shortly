@@ -156,10 +156,6 @@ app.post('/urls/shorten', async (req, res) => {
         return res.status(422).send('URL precisa ter o formato HTTPS!');
     }
 
-    if (!url.includes('s')) {
-        return res.status(422).send('URL precisa ter o formato HTTPS!');
-    }
-
     if (!url.includes(':')) {
         return res.status(422).send('URL precisa ter o formato HTTPS!');
     }
