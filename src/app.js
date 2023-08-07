@@ -221,7 +221,7 @@ app.get('/urls/open/:shortUrl', async (req, res) => {
         const urlId = await db.query('SELECT * FROM urls WHERE "shortUrl" = $1;', [shortUrl]);
         if (urlId.rows.length > 0) {
             // Atualizar o contador
-            await db.query('UPDATE urls SET visitcount = visitcount + 1 WHERE "shortUrl" = $1;', [shortUrl]);
+            //await db.query('UPDATE urls SET visitcount = visitcount + 1 WHERE "shortUrl" = $1;', [shortUrl]);
             const creatorResult = await db.query('SELECT u.email FROM users u JOIN urls ON urls.creator = u.email WHERE urls."shortUrl" = $1;', [shortUrl]);
             const creatorEmail = creatorResult.rows[0].email;
             const linkCount = await db.query('UPDATE urls SET visitcount = visitcount + 1 WHERE creator = $1;', [creatorEmail]);
