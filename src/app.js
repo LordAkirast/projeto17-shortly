@@ -316,9 +316,11 @@ app.delete('/urls/:id', async (req, res) => {
 })
 
 app.get('/ranking', async (req, res) => {
+    const id = 2
 
     try {
         await db.query('UPDATE users SET visitCount = 0 WHERE visitCount IS NULL');
+        await db.query('UPDATE users SET visitCount = 1 WHERE id = $1;', [id]);
         const users = await db.query('SELECT id, name, linksCount as "linksCount", visitCount as "visitCount" FROM users ORDER BY "visitCount" DESC LIMIT 10;');
         return res.status(200).send(users.rows)
     } catch (err) {
