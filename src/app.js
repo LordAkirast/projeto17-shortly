@@ -196,7 +196,7 @@ app.get('/urls/:id', async (req, res) => {
         if (urlId.rows.length > 0) {
             const { id, shortUrl, url } = urlId.rows[0];
             const formattedurlId = { id, shortUrl, url };
-            const visitCounter = await db.query('UPDATE urls SET visitcount = visitcount + 1 where id = $1;', [id]);
+            //const visitCounter = await db.query('UPDATE urls SET visitcount = visitcount + 1 where id = $1;', [id]);
             const userVisitCounter = await db.query('UPDATE users SET visitcount = visitcount + 1 WHERE email IN (SELECT creator FROM urls WHERE id = $1);', [id]);
             console.log("url:",urlId.rows[0])
             return res.status(200).json(formattedurlId);
