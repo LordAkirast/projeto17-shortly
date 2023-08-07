@@ -196,7 +196,14 @@ app.get('/urls/:id', async (req, res) => {
         if (urlId.rows.length > 0) {
             const { id, shortUrl, url } = urlId.rows[0];
             const formattedurlId = { id, shortUrl, url };
-            const visitCounter = await db.query('UPDATE urls SET visitcount = visitcount + 1 where id = $1;', [id]);
+
+
+            // Atualize o campo visitCount na tabela 'users' em vez da tabela 'urls'
+            const userToken = req.headers.authorization.replace('Bearer ', '');
+            const updateUserVisitCount = await db.query('UPDATE users SET visitCount = visitCount + 1 WHERE token = $1;', [userToken]);
+
+
+          //  const visitCounter = await db.query('UPDATE urls SET visitcount = visitcount + 1 where id = $1;', [id]);
             console.log(urlId.rows[0])
             return res.status(200).json(formattedurlId);
         } else {
@@ -319,7 +326,7 @@ app.get('/ranking', async (req, res) => {
 
     try {
         await db.query('UPDATE users SET visitCount = 0 WHERE visitCount IS NULL');
-        const users = await db.query('SELECT id, name, linksCount as "linksCount", visitCount as "visitCount" FROM users ORDER BY linksCount DESC LIMIT 10;');
+        const users = await db.query('SELECT id, name, linksCount as "linksCount", visitCount as "visitCount" FROM users ORDER BY "visitCount" DESC LIMIT 10;');
         return res.status(200).send(users.rows)
     } catch (err) {
         return res.status(500).send(err.message)
