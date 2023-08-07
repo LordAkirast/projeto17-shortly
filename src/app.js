@@ -8,6 +8,7 @@ import { v4 as uuid } from 'uuid'
 import { nanoid } from 'nanoid';
 import createUser from "./schemas/createUser.schema.js"
 import loginUser from "./schemas/loginUser.schema.js"
+import { createUserfunc } from "./controllers/userController.js"
 
 
 const app = express()
@@ -15,20 +16,6 @@ app.use(cors())
 app.use(express.json())
 
 ///sudo su -c "pg_dump shortly --inserts --no-owner" postgres > dump.sql
-
-
-
-
-// const createUser = Joi.object({
-//     name: Joi.string().required(),
-//     email: Joi.string().email().required(),
-//     password: Joi.string().required(),
-// });
-
-// const loginUser = Joi.object({
-//     email: Joi.string().email().required(),
-//     password: Joi.string().required(),
-// });
 
 let token = "";
 
@@ -46,43 +33,45 @@ const addAuthorizationHeader = (req, res, next) => {
 
 
 
-app.post('/signup', async (req, res) => {
+// app.post('/signup', async (req, res) => {
 
-    const { name, email, password, confirmPassword } = req.body
-
-
-
-    const validation = createUser.validate({ name, email, password }, { abortEarly: "False" })
-    if (validation.error) {
-        console.log("erro 1")
-        const errors = validation.error.details.map((detail) => detail.message)
-        return res.status(422).send(errors);
-    }
-
-    if (password !== confirmPassword) {
-        return res.status(422).send('A senha e a confirmaçao de senha devem ser iguais.')
-    }
-
-    //encriptação
-    const passCrypt = bcrypt.hashSync(password, 10)
-
-
-    try {
-
-        const userVerify = await db.query('SELECT * FROM USERS where email = $1', [email]);
-        if (userVerify.rows.length > 0) {
-            return res.status(409).send('Email já cadastrado!')
-        } else {
-            const user = await db.query('INSERT INTO USERS (name, email, password, "createdat") values ($1, $2, $3, $4);', [name, email, passCrypt, createdAt]);
-            return res.status(201).send('Usuário criado!')
-        }
-    } catch (err) {
-        return res.status(500).send(err.message)
-    }
+//     const { name, email, password, confirmPassword } = req.body
 
 
 
-})
+//     const validation = createUser.validate({ name, email, password }, { abortEarly: "False" })
+//     if (validation.error) {
+//         console.log("erro 1")
+//         const errors = validation.error.details.map((detail) => detail.message)
+//         return res.status(422).send(errors);
+//     }
+
+//     if (password !== confirmPassword) {
+//         return res.status(422).send('A senha e a confirmaçao de senha devem ser iguais.')
+//     }
+
+//     //encriptação
+//     const passCrypt = bcrypt.hashSync(password, 10)
+
+
+//     try {
+
+//         const userVerify = await db.query('SELECT * FROM USERS where email = $1', [email]);
+//         if (userVerify.rows.length > 0) {
+//             return res.status(409).send('Email já cadastrado!')
+//         } else {
+//             const user = await db.query('INSERT INTO USERS (name, email, password, "createdat") values ($1, $2, $3, $4);', [name, email, passCrypt, createdAt]);
+//             return res.status(201).send('Usuário criado!')
+//         }
+//     } catch (err) {
+//         return res.status(500).send(err.message)
+//     }
+
+
+
+// })
+
+app.post('/signup', createUserfunc);
 
 app.post('/signin', async (req, res) => {
 
