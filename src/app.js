@@ -9,7 +9,6 @@ import { nanoid } from 'nanoid';
 import createUser from "./schemas/createUser.schema.js"
 import loginUser from "./schemas/loginUser.schema.js"
 import { createUserfunc } from "./controllers/userController.js"
-import { signInUser } from "./controllers/userController.js"
 
 
 const app = express()
@@ -33,40 +32,36 @@ const addAuthorizationHeader = (req, res, next) => {
 };
 
 
-app.post('/signup', createUserfunc);
 
-// app.post('/signin', async (req, res) => {
+// app.post('/signup', async (req, res) => {
 
-//     const { email, password } = req.body
+//     const { name, email, password, confirmPassword } = req.body
 
 
-//     const validation = loginUser.validate({ email, password }, { abortEarly: "False" })
+
+//     const validation = createUser.validate({ name, email, password }, { abortEarly: "False" })
 //     if (validation.error) {
-//         console.log("erro 1 - signin")
+//         console.log("erro 1")
 //         const errors = validation.error.details.map((detail) => detail.message)
 //         return res.status(422).send(errors);
 //     }
 
+//     if (password !== confirmPassword) {
+//         return res.status(422).send('A senha e a confirmaçao de senha devem ser iguais.')
+//     }
+
+//     //encriptação
+//     const passCrypt = bcrypt.hashSync(password, 10)
+
+
 //     try {
 
 //         const userVerify = await db.query('SELECT * FROM USERS where email = $1', [email]);
-//         console.log(userVerify.rows)
 //         if (userVerify.rows.length > 0) {
-
-//             const decrypt = bcrypt.compareSync(password, userVerify.rows[0].password)
-
-//             if (decrypt === true) {
-//                 console.log('Usuário logado!')
-//                 token = uuid()
-//                 const creatorToken = await db.query('UPDATE users set token = $1 where email = $2;', [token, email])
-//                 return res.status(200).send(({ token: token }))
-//             } else {
-//                 console.log('senha incorreta')
-//                 return res.status(401).send('Senha incorreta!')
-//             }
+//             return res.status(409).send('Email já cadastrado!')
 //         } else {
-//             console.log('email incorreto')
-//             return res.status(401).send('email incorreto!')
+//             const user = await db.query('INSERT INTO USERS (name, email, password, "createdat") values ($1, $2, $3, $4);', [name, email, passCrypt, createdAt]);
+//             return res.status(201).send('Usuário criado!')
 //         }
 //     } catch (err) {
 //         return res.status(500).send(err.message)
@@ -76,7 +71,48 @@ app.post('/signup', createUserfunc);
 
 // })
 
-app.post('/signin', signInUser);
+app.post('/signup', createUserfunc);
+
+app.post('/signin', async (req, res) => {
+
+    const { email, password } = req.body
+
+
+    const validation = loginUser.validate({ email, password }, { abortEarly: "False" })
+    if (validation.error) {
+        console.log("erro 1 - signin")
+        const errors = validation.error.details.map((detail) => detail.message)
+        return res.status(422).send(errors);
+    }
+
+    try {
+
+        const userVerify = await db.query('SELECT * FROM USERS where email = $1', [email]);
+        console.log(userVerify.rows)
+        if (userVerify.rows.length > 0) {
+
+            const decrypt = bcrypt.compareSync(password, userVerify.rows[0].password)
+
+            if (decrypt === true) {
+                console.log('Usuário logado!')
+                token = uuid()
+                const creatorToken = await db.query('UPDATE users set token = $1 where email = $2;', [token, email])
+                return res.status(200).send(({ token: token }))
+            } else {
+                console.log('senha incorreta')
+                return res.status(401).send('Senha incorreta!')
+            }
+        } else {
+            console.log('email incorreto')
+            return res.status(401).send('email incorreto!')
+        }
+    } catch (err) {
+        return res.status(500).send(err.message)
+    }
+
+
+
+})
 
 
 app.use(addAuthorizationHeader);
