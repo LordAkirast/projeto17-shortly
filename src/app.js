@@ -37,10 +37,8 @@ const addAuthorizationHeader = (req, res, next) => {
 
     const token = uuid()
 
-    // Adicione o token no header "Authorization" no formato "Bearer TOKEN"
     req.headers.authorization = `Bearer ${token}`;
 
-    // Chame o próximo middleware ou rota
     next();
 };
 
@@ -185,6 +183,31 @@ app.post('/urls/shorten', async (req, res) => {
 
 
 })
+
+app.get('/urls/:id', async (req, res) => {
+    const { id } = req.params
+
+    try {
+
+        const urlId = await db.query('SELECT * FROM urls WHERE id = $1;', [id]);
+        if (urlId.rows.length > 0) {
+            const { id, shortUrl, url } = urlId.rows[0];
+            const formattedurlId = { id, shortUrl, url };
+            return res.status(200).json(formattedurlId);
+        } else {
+            return res.status(404).send('Não existe este ID.');
+        }
+
+
+    } catch (err) {
+        return res.status(500).send(err.message)
+
+    }
+
+
+})
+
+
 
 app.post('/teste', async (req, res) => {
     return res.status(200).send('Sucesso')
