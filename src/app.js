@@ -315,7 +315,7 @@ app.delete('/urls/:id', async (req, res) => {
     }
 })
 
-app.get('/rankings', async (req, res) => {
+app.get('/ranking', async (req, res) => {
 
     try {
         const users = await db.query('SELECT id, name, linksCount, visitCount FROM users ORDER BY linksCount DESC LIMIT 10;');
