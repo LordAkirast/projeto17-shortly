@@ -28,7 +28,7 @@ const loginUser = Joi.object({
     password: Joi.string().required(),
 });
 
-let token = "";
+//let token = "";
 
 const createdAt = dayjs().format('YYYY-MM-DD HH:mm:ss');
 
