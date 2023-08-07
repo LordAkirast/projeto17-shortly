@@ -105,7 +105,7 @@ app.post('/signin', async (req, res) => {
             if (decrypt === true) {
                 console.log('Usuário logado!')
                 token = uuid()
-                console.log(token)
+                const creatorToken =  await db.query('UPDATE users set token = $1 where email = $2;', [token, email])
                 return res.status(200).send(({ token: token }))
             } else {
                 console.log('senha incorreta')
@@ -166,8 +166,10 @@ app.post('/urls/shorten', async (req, res) => {
     }
 
     try {
+        const creator = await db.query('SELECT * FROM users where token = $1;', [token])
         const insertURL = await db.query('INSERT INTO urls (url, "createdat", "shortUrl" ) values ($1, $2, $3);', [url, createdAt, shortId])
         const selectURL = await db.query('SELECT * FROM urls where url = $1;', [url])
+        const insertCreator = await db.query('UPDATE urls SET creator = $1 where "shortUrl" = $2;', [creator.rows[0].token, shortId])
         const objectReturn = {
             id: selectURL.rows[0].id,
             shortUrl: selectURL.rows[0].shortUrl
@@ -207,6 +209,33 @@ app.get('/urls/:id', async (req, res) => {
 
 })
 
+app.get('/users/me', async (req, res) => {
+
+    if (!token) {
+        return res.status(401).send('Precisa ter o token.')
+    }
+
+
+
+    try {
+
+        const urlId = await db.query('SELECT * FROM urls WHERE id = $1;', [id]);
+        if (urlId.rows.length > 0) {
+            const { id, shortUrl, url } = urlId.rows[0];
+            const formattedurlId = { id, shortUrl, url };
+            return res.status(200).json(formattedurlId);
+        } else {
+            return res.status(404).send('Não existe este ID.');
+        }
+
+
+    } catch (err) {
+        return res.status(500).send(err.message)
+
+    }
+
+
+})
 
 
 app.post('/teste', async (req, res) => {

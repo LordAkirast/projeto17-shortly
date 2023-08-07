@@ -28,7 +28,9 @@ CREATE TABLE public.urls (
     id integer NOT NULL,
     url text NOT NULL,
     createdat timestamp without time zone DEFAULT now(),
-    "shortUrl" text
+    "shortUrl" text,
+    visitcount integer,
+    creator text
 );
 
 
@@ -61,7 +63,9 @@ CREATE TABLE public.users (
     name text NOT NULL,
     email text NOT NULL,
     password text NOT NULL,
-    createdat timestamp without time zone
+    createdat timestamp without time zone,
+    visitcount integer,
+    token text
 );
 
 
@@ -103,25 +107,25 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 -- Data for Name: urls; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.urls VALUES (1, 'Lorena39@hotmail.comiSgSfCwC', '2023-08-05 17:15:22.376175', NULL);
-INSERT INTO public.urls VALUES (2, 'Lorena39@hotmail.com-PA4S6dE', '2023-08-05 17:15:22.376175', NULL);
-INSERT INTO public.urls VALUES (3, 'Lorena39@hotmail.comGMVMHOo4', '2023-08-05 17:15:22.376175', NULL);
-INSERT INTO public.urls VALUES (4, 'Lorena39@hotmail.comM47KMUmv', '2023-08-05 17:15:22.376175', NULL);
-INSERT INTO public.urls VALUES (5, 'https:/Lorena39@hotmail.comPrRrWyOS', '2023-08-05 17:15:22.376175', NULL);
-INSERT INTO public.urls VALUES (6, 'https:/Lorena39@hotmail.com', '2023-08-06 03:03:21', NULL);
-INSERT INTO public.urls VALUES (7, 'https:/Lorena39@hotmail.com', '2023-08-06 03:06:42', 'puVdmqJD');
-INSERT INTO public.urls VALUES (8, 'https:/Lorena39@hotmail.com', '2023-08-06 03:07:34', 'pv8G0vzQ');
-INSERT INTO public.urls VALUES (9, 'https:/Lorena39@hotmail.com', '2023-08-06 13:43:47', 'lvdPzCsh');
-INSERT INTO public.urls VALUES (10, 'https:/Lorena39@hotmail.com', '2023-08-06 14:02:54', 'mtwWrmSF');
-INSERT INTO public.urls VALUES (11, 'https:/Lorena39@hotmail.com', '2023-08-06 14:07:15', 'EfEjgvXu');
+INSERT INTO public.urls VALUES (1, 'Lorena39@hotmail.comiSgSfCwC', '2023-08-05 17:15:22.376175', NULL, NULL, NULL);
+INSERT INTO public.urls VALUES (2, 'Lorena39@hotmail.com-PA4S6dE', '2023-08-05 17:15:22.376175', NULL, NULL, NULL);
+INSERT INTO public.urls VALUES (3, 'Lorena39@hotmail.comGMVMHOo4', '2023-08-05 17:15:22.376175', NULL, NULL, NULL);
+INSERT INTO public.urls VALUES (4, 'Lorena39@hotmail.comM47KMUmv', '2023-08-05 17:15:22.376175', NULL, NULL, NULL);
+INSERT INTO public.urls VALUES (5, 'https:/Lorena39@hotmail.comPrRrWyOS', '2023-08-05 17:15:22.376175', NULL, NULL, NULL);
+INSERT INTO public.urls VALUES (6, 'https:/Lorena39@hotmail.com', '2023-08-06 03:03:21', NULL, NULL, NULL);
+INSERT INTO public.urls VALUES (7, 'https:/Lorena39@hotmail.com', '2023-08-06 03:06:42', 'puVdmqJD', NULL, NULL);
+INSERT INTO public.urls VALUES (8, 'https:/Lorena39@hotmail.com', '2023-08-06 03:07:34', 'pv8G0vzQ', NULL, NULL);
+INSERT INTO public.urls VALUES (9, 'https:/Lorena39@hotmail.com', '2023-08-06 13:43:47', 'lvdPzCsh', NULL, NULL);
+INSERT INTO public.urls VALUES (10, 'https:/Lorena39@hotmail.com', '2023-08-06 14:02:54', 'mtwWrmSF', NULL, NULL);
+INSERT INTO public.urls VALUES (11, 'https:/Lorena39@hotmail.com', '2023-08-06 14:07:15', 'EfEjgvXu', NULL, NULL);
 
 
 --
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.users VALUES (1, 'Isabel Oliveira', 'Lorena37@hotmail.com', '$2b$10$IF7kKMRtzAGW7wD5g3AhOu17jAEar0zbh4heFpiyPzDk.SedQ/8Zq', '2023-08-04 04:21:06');
-INSERT INTO public.users VALUES (2, 'Isabel Oliveira', 'Lorena39@hotmail.com', '$2b$10$AHz3Y7SMl/OzxfKEmDEb.uMuqw75K1Lym8.U.HkQ/jIGoLgOoXtgi', '2023-08-04 04:21:18');
+INSERT INTO public.users VALUES (1, 'Isabel Oliveira', 'Lorena37@hotmail.com', '$2b$10$IF7kKMRtzAGW7wD5g3AhOu17jAEar0zbh4heFpiyPzDk.SedQ/8Zq', '2023-08-04 04:21:06', NULL, NULL);
+INSERT INTO public.users VALUES (2, 'Isabel Oliveira', 'Lorena39@hotmail.com', '$2b$10$AHz3Y7SMl/OzxfKEmDEb.uMuqw75K1Lym8.U.HkQ/jIGoLgOoXtgi', '2023-08-04 04:21:18', NULL, NULL);
 
 
 --
