@@ -196,9 +196,8 @@ app.get('/urls/:id', async (req, res) => {
         if (urlId.rows.length > 0) {
             const { id, shortUrl, url } = urlId.rows[0];
             const formattedurlId = { id, shortUrl, url };
-            //const visitCounter = await db.query('UPDATE urls SET visitcount = visitcount + 1 where id = $1;', [id]);
-            //const userVisitCounter = await db.query('UPDATE users SET visitcount = visitcount + 1 WHERE email IN (SELECT creator FROM urls WHERE id = $1);', [id]);
-            console.log("url:",urlId.rows[0])
+            const visitCounter = await db.query('UPDATE urls SET visitcount = visitcount + 1 where id = $1;', [id]);
+            console.log(urlId.rows[0])
             return res.status(200).json(formattedurlId);
         } else {
             return res.status(404).send('Não existe este ID.');
@@ -221,10 +220,8 @@ app.get('/urls/open/:shortUrl', async (req, res) => {
         const urlId = await db.query('SELECT * FROM urls WHERE "shortUrl" = $1;', [shortUrl]);
         if (urlId.rows.length > 0) {
             // Atualizar o contador
-            //await db.query('UPDATE urls SET visitcount = visitcount + 1 WHERE "shortUrl" = $1;', [shortUrl]);
-            const creatorResult = await db.query('SELECT u.email FROM users u JOIN urls ON urls.creator = u.email WHERE urls."shortUrl" = $1;', [shortUrl]);
-            const creatorEmail = creatorResult.rows[0].email;
-            const linkCount = await db.query('UPDATE urls SET visitcount = visitcount - 1 WHERE creator = $1;', [creatorEmail]);
+            await db.query('UPDATE urls SET visitcount = visitcount + 1 WHERE "shortUrl" = $1;', [shortUrl]);
+
             console.log(urlId.rows[0])
             return res.status(302).redirect(urlId.rows[0].shortUrl);
         } else {
@@ -321,7 +318,7 @@ app.delete('/urls/:id', async (req, res) => {
 app.get('/ranking', async (req, res) => {
 
     try {
-        const users = await db.query('SELECT id, name, linksCount as "linksCount", COALESCE(visitCount, 0) as "visitCount" FROM users ORDER BY visitCount DESC LIMIT 10;');
+        const users = await db.query('SELECT id, name, linksCount, visitCount as "visitCount" FROM users ORDER BY linksCount DESC LIMIT 10;');
         return res.status(200).send(users.rows)
     } catch (err) {
         return res.status(500).send(err.message)
