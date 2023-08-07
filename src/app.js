@@ -6,6 +6,8 @@ import dayjs from "dayjs"
 import bcrypt from "bcrypt"
 import { v4 as uuid } from 'uuid'
 import { nanoid } from 'nanoid';
+import createUser from "./schemas/createUser.schema.js"
+import loginUser from "./schemas/loginUser.schema.js"
 
 
 const app = express()
@@ -17,16 +19,16 @@ app.use(express.json())
 
 
 
-const createUser = Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string().email().required(),
-    password: Joi.string().required(),
-});
+// const createUser = Joi.object({
+//     name: Joi.string().required(),
+//     email: Joi.string().email().required(),
+//     password: Joi.string().required(),
+// });
 
-const loginUser = Joi.object({
-    email: Joi.string().email().required(),
-    password: Joi.string().required(),
-});
+// const loginUser = Joi.object({
+//     email: Joi.string().email().required(),
+//     password: Joi.string().required(),
+// });
 
 let token = "";
 
@@ -319,7 +321,7 @@ app.get('/ranking', async (req, res) => {
     const id = 2
 
     try {
-        await db.query('UPDATE users SET visitCount = 0 WHERE visitCount IS NULL');
+        await db.query('UPDATE users SET visitCount = 0 WHERE visitCount IS NULL;');
         await db.query('UPDATE users SET visitCount = 1 WHERE id = $1;', [id]);
         const users = await db.query('SELECT id, name, linksCount as "linksCount", visitCount as "visitCount" FROM users ORDER BY "visitCount" DESC LIMIT 10;');
         return res.status(200).send(users.rows)
