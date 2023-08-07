@@ -279,6 +279,7 @@ app.get('/users/me', async (req, res) => {
 
 app.delete('/urls/:id', async (req, res) => {
     const { id } = req.params
+    
     if (!token) {
         return res.status(403).send('precisa ter o token')
     }
@@ -292,9 +293,10 @@ app.delete('/urls/:id', async (req, res) => {
         if (verifyId.rows.length > 0 ) {
 
         ///verificar se o cara pode deletar a coisa. se ele é criador.
-        const verifyDelPermission = await db.query('SELECT urls.id, urls."shortUrl", urls.url, urls.visitcount FROM urls JOIN users ON urls.creator = users.email WHERE urls.id = $1;', [id])
+        const verifyDelPermission = await db.query('SELECT urls.id, urls."shortUrl", urls.url, urls.visitcount FROM urls JOIN users ON urls.creator = users.email WHERE urls.id = $1 AND users.token = $2;', [id, token])
 
         if (verifyDelPermission.rows.length > 0) {
+            console.log(verifyDelPermission.rows)
 
             const del = await db.query('delete from urls where id = $1;', [id])
 
