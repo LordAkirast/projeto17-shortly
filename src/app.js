@@ -212,27 +212,25 @@ app.get('/urls/:id', async (req, res) => {
 })
 
 app.get('/urls/open/:shortUrl', async (req, res) => {
-    const { shortUrl } = req.params
-
+    const { shortUrl } = req.params;
+  
     try {
+      const urlId = await db.query('SELECT * FROM urls WHERE "shortUrl" = $1;', [shortUrl]);
+      if (urlId.rows.length > 0) {
+        const originalUrl = urlId.rows[0].url;
 
-        const urlId = await db.query('SELECT * FROM urls WHERE "shortUrl" = $1;', [shortUrl]);
-        if (urlId.rows.length > 0) {
-            const visitCounter = await db.query('UPDATE urls SET visitcount = visitcount + 1 where "shortUrl" = $1;', [shortUrl]);
-            res.redirect(urlId.rows[0].shortUrl)
-            return res.status(200).send('Sucesso!')
-        } else {
-            return res.status(404).send('Não existe esta URL.');
-        }
-
-
+        await db.query('UPDATE urls SET visitcount = visitcount + 1 WHERE "shortUrl" = $1;', [shortUrl]);
+        
+        res.redirect(originalUrl);
+        console.log(urlId.rows[0])
+      } else {
+        return res.status(404).send('Não existe esta URL.');
+      }
     } catch (err) {
-        return res.status(500).send(err.message)
-
+      return res.status(500).send(err.message);
     }
-
-
-})
+  });
+  
 
 app.get('/users/me', async (req, res) => {
 
