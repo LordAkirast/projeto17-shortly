@@ -169,7 +169,7 @@ app.post('/urls/shorten', async (req, res) => {
         const creator = await db.query('SELECT * FROM users where token = $1;', [token])
         const insertURL = await db.query('INSERT INTO urls (url, "createdat", "shortUrl" ) values ($1, $2, $3);', [url, createdAt, shortId])
         const selectURL = await db.query('SELECT * FROM urls where url = $1;', [url])
-        const insertCreator = await db.query('UPDATE urls SET creator = $1 where "shortUrl" = $2;', [creator.rows[0].token, shortId])
+        const insertCreator = await db.query('UPDATE urls SET creator = $1 where "shortUrl" = $2;', [creator.rows[0].email, shortId])
         const objectReturn = {
             id: selectURL.rows[0].id,
             shortUrl: selectURL.rows[0].shortUrl
