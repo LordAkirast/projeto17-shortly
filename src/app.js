@@ -28,7 +28,7 @@ const loginUser = Joi.object({
     password: Joi.string().required(),
 });
 
-//let token = "";
+let token = "";
 
 const createdAt = dayjs().format('YYYY-MM-DD HH:mm:ss');
 
@@ -196,14 +196,7 @@ app.get('/urls/:id', async (req, res) => {
         if (urlId.rows.length > 0) {
             const { id, shortUrl, url } = urlId.rows[0];
             const formattedurlId = { id, shortUrl, url };
-
-
-            // Atualize o campo visitCount na tabela 'users' em vez da tabela 'urls'
-            const userToken = req.headers.authorization.replace('Bearer ', '');
-            const updateUserVisitCount = await db.query('UPDATE users SET visitCount = visitCount + 1 WHERE token = $1;', [userToken]);
-
-
-          //  const visitCounter = await db.query('UPDATE urls SET visitcount = visitcount + 1 where id = $1;', [id]);
+            const visitCounter = await db.query('UPDATE urls SET visitcount = visitcount + 1 where id = $1;', [id]);
             console.log(urlId.rows[0])
             return res.status(200).json(formattedurlId);
         } else {
