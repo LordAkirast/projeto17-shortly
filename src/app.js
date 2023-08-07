@@ -319,7 +319,7 @@ app.delete('/urls/:id', async (req, res) => {
 app.get('/ranking', async (req, res) => {
 
     try {
-        const users = await db.query('SELECT id, name, linksCount as "linksCount", COALESCE(visitCount, 0) as "visitCount" FROM users ORDER BY linksCount DESC LIMIT 10;');
+        const users = await db.query('SELECT id, name, linksCount as "linksCount", COALESCE(visitCount, 0) as "visitCount" FROM users ORDER BY visitCount DESC LIMIT 10;');
         return res.status(200).send(users.rows)
     } catch (err) {
         return res.status(500).send(err.message)
