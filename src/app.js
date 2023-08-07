@@ -196,6 +196,7 @@ app.get('/urls/:id', async (req, res) => {
             const { id, shortUrl, url } = urlId.rows[0];
             const formattedurlId = { id, shortUrl, url };
             const visitCounter = await db.query('UPDATE urls SET visitcount = visitcount + 1 where id = $1;', [id]);
+            console.log(urlId.rows[0])
             return res.status(200).json(formattedurlId);
         } else {
             return res.status(404).send('Não existe este ID.');
