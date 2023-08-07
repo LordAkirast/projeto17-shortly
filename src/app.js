@@ -319,7 +319,7 @@ app.get('/ranking', async (req, res) => {
 
     try {
         await db.query('UPDATE users SET visitCount = 0 WHERE visitCount IS NULL');
-        const users = await db.query('SELECT id, name, linksCount, visitCount as "visitCount" FROM users ORDER BY linksCount DESC LIMIT 10;');
+        const users = await db.query('SELECT id, name, linksCount as "linksCount", visitCount as "visitCount" FROM users ORDER BY linksCount DESC LIMIT 10;');
         return res.status(200).send(users.rows)
     } catch (err) {
         return res.status(500).send(err.message)
