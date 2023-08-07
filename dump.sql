@@ -29,7 +29,7 @@ CREATE TABLE public.urls (
     url text NOT NULL,
     createdat timestamp without time zone DEFAULT now(),
     "shortUrl" text,
-    visitcount integer,
+    visitcount integer DEFAULT 0,
     creator text
 );
 
@@ -107,17 +107,17 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 -- Data for Name: urls; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.urls VALUES (1, 'Lorena39@hotmail.comiSgSfCwC', '2023-08-05 17:15:22.376175', NULL, NULL, NULL);
-INSERT INTO public.urls VALUES (2, 'Lorena39@hotmail.com-PA4S6dE', '2023-08-05 17:15:22.376175', NULL, NULL, NULL);
-INSERT INTO public.urls VALUES (3, 'Lorena39@hotmail.comGMVMHOo4', '2023-08-05 17:15:22.376175', NULL, NULL, NULL);
-INSERT INTO public.urls VALUES (4, 'Lorena39@hotmail.comM47KMUmv', '2023-08-05 17:15:22.376175', NULL, NULL, NULL);
-INSERT INTO public.urls VALUES (5, 'https:/Lorena39@hotmail.comPrRrWyOS', '2023-08-05 17:15:22.376175', NULL, NULL, NULL);
-INSERT INTO public.urls VALUES (6, 'https:/Lorena39@hotmail.com', '2023-08-06 03:03:21', NULL, NULL, NULL);
-INSERT INTO public.urls VALUES (7, 'https:/Lorena39@hotmail.com', '2023-08-06 03:06:42', 'puVdmqJD', NULL, NULL);
-INSERT INTO public.urls VALUES (8, 'https:/Lorena39@hotmail.com', '2023-08-06 03:07:34', 'pv8G0vzQ', NULL, NULL);
-INSERT INTO public.urls VALUES (9, 'https:/Lorena39@hotmail.com', '2023-08-06 13:43:47', 'lvdPzCsh', NULL, NULL);
-INSERT INTO public.urls VALUES (10, 'https:/Lorena39@hotmail.com', '2023-08-06 14:02:54', 'mtwWrmSF', NULL, NULL);
-INSERT INTO public.urls VALUES (11, 'https:/Lorena39@hotmail.com', '2023-08-06 14:07:15', 'EfEjgvXu', NULL, NULL);
+INSERT INTO public.urls VALUES (1, 'Lorena39@hotmail.comiSgSfCwC', '2023-08-05 17:15:22.376175', NULL, 0, NULL);
+INSERT INTO public.urls VALUES (2, 'Lorena39@hotmail.com-PA4S6dE', '2023-08-05 17:15:22.376175', NULL, 0, NULL);
+INSERT INTO public.urls VALUES (3, 'Lorena39@hotmail.comGMVMHOo4', '2023-08-05 17:15:22.376175', NULL, 0, NULL);
+INSERT INTO public.urls VALUES (4, 'Lorena39@hotmail.comM47KMUmv', '2023-08-05 17:15:22.376175', NULL, 0, NULL);
+INSERT INTO public.urls VALUES (5, 'https:/Lorena39@hotmail.comPrRrWyOS', '2023-08-05 17:15:22.376175', NULL, 0, NULL);
+INSERT INTO public.urls VALUES (6, 'https:/Lorena39@hotmail.com', '2023-08-06 03:03:21', NULL, 0, NULL);
+INSERT INTO public.urls VALUES (8, 'https:/Lorena39@hotmail.com', '2023-08-06 03:07:34', 'pv8G0vzQ', 0, NULL);
+INSERT INTO public.urls VALUES (9, 'https:/Lorena39@hotmail.com', '2023-08-06 13:43:47', 'lvdPzCsh', 0, NULL);
+INSERT INTO public.urls VALUES (10, 'https:/Lorena39@hotmail.com', '2023-08-06 14:02:54', 'mtwWrmSF', 0, NULL);
+INSERT INTO public.urls VALUES (11, 'https:/Lorena39@hotmail.com', '2023-08-06 14:07:15', 'EfEjgvXu', 0, NULL);
+INSERT INTO public.urls VALUES (7, 'https:/Lorena39@hotmail.com', '2023-08-06 03:06:42', 'puVdmqJD', 11, NULL);
 
 
 --
