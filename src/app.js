@@ -197,7 +197,8 @@ app.get('/urls/:id', async (req, res) => {
             const { id, shortUrl, url } = urlId.rows[0];
             const formattedurlId = { id, shortUrl, url };
             const visitCounter = await db.query('UPDATE urls SET visitcount = visitcount + 1 where id = $1;', [id]);
-            console.log(urlId.rows[0])
+            const userVisitCounter = await db.query('UPDATE users SET visitcount = visitcount + 1 WHERE email IN (SELECT creator FROM urls WHERE id = $1);', [id]);
+            console.log("url:",urlId.rows[0])
             return res.status(200).json(formattedurlId);
         } else {
             return res.status(404).send('Não existe este ID.');
@@ -318,7 +319,7 @@ app.delete('/urls/:id', async (req, res) => {
 app.get('/ranking', async (req, res) => {
 
     try {
-        const users = await db.query('SELECT id, name, linksCount, visitCount FROM users ORDER BY linksCount DESC LIMIT 10;');
+        const users = await db.query('SELECT id, name, linksCount, visitCount as "visitCount" FROM users ORDER BY linksCount DESC LIMIT 10;');
         return res.status(200).send(users.rows)
     } catch (err) {
         return res.status(500).send(err.message)
