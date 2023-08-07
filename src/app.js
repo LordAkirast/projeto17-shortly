@@ -170,6 +170,7 @@ app.post('/urls/shorten', async (req, res) => {
         const insertURL = await db.query('INSERT INTO urls (url, "createdat", "shortUrl" ) values ($1, $2, $3);', [url, createdAt, shortId])
         const selectURL = await db.query('SELECT * FROM urls where url = $1;', [url])
         const insertCreator = await db.query('UPDATE urls SET creator = $1 where "shortUrl" = $2;', [creator.rows[0].email, shortId])
+        const linkCount = await db.query('UPDATE users set linksCount = linksCount + 1 where token = $1;', [token])
         const objectReturn = {
             id: selectURL.rows[0].id,
             shortUrl: selectURL.rows[0].shortUrl
@@ -279,7 +280,7 @@ app.get('/users/me', async (req, res) => {
 
 app.delete('/urls/:id', async (req, res) => {
     const { id } = req.params
-    
+
     if (!token) {
         return res.status(403).send('precisa ter o token')
     }
@@ -314,6 +315,17 @@ app.delete('/urls/:id', async (req, res) => {
     }
 })
 
+app.get('/rankings', async (req, res) => {
+
+    try {
+        const users = await db.query('SELECT id, name, linksCount, visitCount FROM users ORDER BY linksCount DESC LIMIT 10;');
+        return res.status(200).send(users.rows)
+    } catch (err) {
+        return res.status(500).send(err.message)
+        
+    }
+
+})
 
 app.post('/teste', async (req, res) => {
     return res.status(200).send('Sucesso')

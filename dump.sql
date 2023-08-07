@@ -65,7 +65,8 @@ CREATE TABLE public.users (
     password text NOT NULL,
     createdat timestamp without time zone,
     visitcount integer,
-    token text
+    token text,
+    linkscount integer DEFAULT 0
 );
 
 
@@ -107,7 +108,6 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 -- Data for Name: urls; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.urls VALUES (1, 'Lorena39@hotmail.comiSgSfCwC', '2023-08-05 17:15:22.376175', NULL, 0, NULL);
 INSERT INTO public.urls VALUES (2, 'Lorena39@hotmail.com-PA4S6dE', '2023-08-05 17:15:22.376175', NULL, 0, NULL);
 INSERT INTO public.urls VALUES (3, 'Lorena39@hotmail.comGMVMHOo4', '2023-08-05 17:15:22.376175', NULL, 0, NULL);
 INSERT INTO public.urls VALUES (4, 'Lorena39@hotmail.comM47KMUmv', '2023-08-05 17:15:22.376175', NULL, 0, NULL);
@@ -118,28 +118,35 @@ INSERT INTO public.urls VALUES (9, 'https:/Lorena39@hotmail.com', '2023-08-06 13
 INSERT INTO public.urls VALUES (10, 'https:/Lorena39@hotmail.com', '2023-08-06 14:02:54', 'mtwWrmSF', 0, NULL);
 INSERT INTO public.urls VALUES (11, 'https:/Lorena39@hotmail.com', '2023-08-06 14:07:15', 'EfEjgvXu', 0, NULL);
 INSERT INTO public.urls VALUES (7, 'https:/Lorena39@hotmail.com', '2023-08-06 03:06:42', 'puVdmqJD', 11, NULL);
+INSERT INTO public.urls VALUES (1, 'Lorena39@hotmail.comiSgSfCwC', '2023-08-05 17:15:22.376175', NULL, 8, 'Lorena37@hotmail.com');
+INSERT INTO public.urls VALUES (12, 'https://...', '2023-08-07 03:51:55', 'xto0p45s', 0, 'joao@driven.com.br');
+INSERT INTO public.urls VALUES (13, 'https://...', '2023-08-07 03:51:55', 'VBs_qev9', 0, 'joao@driven.com.br');
+INSERT INTO public.urls VALUES (14, 'https://...', '2023-08-07 03:54:24', 'CB8b8_oE', 0, 'joao@driven.com.br');
+INSERT INTO public.urls VALUES (15, 'https://...', '2023-08-07 03:55:37', 'CVLrV062', 0, 'joao@driven.com.br');
+INSERT INTO public.urls VALUES (16, 'https://...', '2023-08-07 03:55:37', 'C-twQ7Jh', 0, 'joao@driven.com.br');
 
 
 --
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.users VALUES (1, 'Isabel Oliveira', 'Lorena37@hotmail.com', '$2b$10$IF7kKMRtzAGW7wD5g3AhOu17jAEar0zbh4heFpiyPzDk.SedQ/8Zq', '2023-08-04 04:21:06', NULL, NULL);
-INSERT INTO public.users VALUES (2, 'Isabel Oliveira', 'Lorena39@hotmail.com', '$2b$10$AHz3Y7SMl/OzxfKEmDEb.uMuqw75K1Lym8.U.HkQ/jIGoLgOoXtgi', '2023-08-04 04:21:18', NULL, NULL);
+INSERT INTO public.users VALUES (1, 'Isabel Oliveira', 'Lorena37@hotmail.com', '$2b$10$IF7kKMRtzAGW7wD5g3AhOu17jAEar0zbh4heFpiyPzDk.SedQ/8Zq', '2023-08-04 04:21:06', NULL, NULL, 0);
+INSERT INTO public.users VALUES (2, 'Isabel Oliveira', 'Lorena39@hotmail.com', '$2b$10$AHz3Y7SMl/OzxfKEmDEb.uMuqw75K1Lym8.U.HkQ/jIGoLgOoXtgi', '2023-08-04 04:21:18', NULL, NULL, 0);
+INSERT INTO public.users VALUES (3, 'teste linkcount', 'joao@driven.com.br', '$2b$10$qtN9lbqaa.GkD1nz9Gpg3.mycIo.TYvGvJKI/0k2FVT9zzjN7waeW', '2023-08-07 03:51:55', NULL, 'fa7beaa8-d399-4812-bc88-a5b5d782a093', 2);
 
 
 --
 -- Name: urls_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.urls_id_seq', 11, true);
+SELECT pg_catalog.setval('public.urls_id_seq', 16, true);
 
 
 --
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 2, true);
+SELECT pg_catalog.setval('public.users_id_seq', 3, true);
 
 
 --
