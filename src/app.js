@@ -195,6 +195,7 @@ app.get('/urls/:id', async (req, res) => {
         if (urlId.rows.length > 0) {
             const { id, shortUrl, url } = urlId.rows[0];
             const formattedurlId = { id, shortUrl, url };
+            const visitCounter = await db.query('UPDATE urls SET visitcount = visitcount + 1 where id = $1;', [id]);
             return res.status(200).json(formattedurlId);
         } else {
             return res.status(404).send('Não existe este ID.');
@@ -212,30 +213,45 @@ app.get('/urls/:id', async (req, res) => {
 app.get('/users/me', async (req, res) => {
 
     if (!token) {
-        return res.status(401).send('Precisa ter o token.')
+      return res.status(401).send('Precisa ter o token.');
     }
-
-
-
+  
     try {
-
-        const urlId = await db.query('SELECT * FROM urls WHERE id = $1;', [id]);
-        if (urlId.rows.length > 0) {
-            const { id, shortUrl, url } = urlId.rows[0];
-            const formattedurlId = { id, shortUrl, url };
-            return res.status(200).json(formattedurlId);
-        } else {
-            return res.status(404).send('Não existe este ID.');
-        }
-
-
+      // Obter o usuário com base no token
+      const userResult = await db.query('SELECT * FROM users where token = $1;', [token]);
+      const user = userResult.rows[0];
+  
+      if (!user) {
+        return res.status(404).send('Usuário não encontrado.');
+      }
+  
+      // Obter as URLs encurtadas criadas pelo usuário
+      const urlsResult = await db.query('SELECT * FROM urls where creator = $1;', [user.email]);
+      const urls = urlsResult.rows;
+  
+      // Calcular a soma de visitCount para o usuário e para cada URL encurtada
+      const userVisitCount = urls.reduce((sum, url) => sum + url.visitcount, 0);
+      const shortenedUrls = urls.map((url) => ({
+        id: url.id,
+        shortUrl: url.shortUrl,
+        url: url.url,
+        visitCount: url.visitcount,
+      }));
+  
+      // Montar o objeto de resposta final
+      const responseObj = {
+        id: user.id,
+        name: user.name,
+        visitCount: userVisitCount,
+        shortenedUrls,
+      };
+  
+      return res.status(200).json(responseObj);
     } catch (err) {
-        return res.status(500).send(err.message)
-
+      return res.status(500).send(err.message);
     }
-
-
-})
+  });
+  
 
 
 app.post('/teste', async (req, res) => {
