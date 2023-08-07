@@ -213,25 +213,25 @@ app.get('/urls/:id', async (req, res) => {
 
 app.get('/urls/open/:shortUrl', async (req, res) => {
     const { shortUrl } = req.params;
-  
-  
+
+
     try {
-      const urlId = await db.query('SELECT * FROM urls WHERE "shortUrl" = $1;', [shortUrl]);
-      if (urlId.rows.length > 0) {
-        // Atualizar o contador
-        await db.query('UPDATE urls SET visitcount = visitcount + 1 WHERE "shortUrl" = $1;', [shortUrl]);
-        
-        console.log(urlId.rows[0])
-        return res.status(302).redirect(urlId.rows[0].shortUrl);
-      } else {
-        return res.status(404).send('Não existe esta URL.');
-      }
+        const urlId = await db.query('SELECT * FROM urls WHERE "shortUrl" = $1;', [shortUrl]);
+        if (urlId.rows.length > 0) {
+            // Atualizar o contador
+            await db.query('UPDATE urls SET visitcount = visitcount + 1 WHERE "shortUrl" = $1;', [shortUrl]);
+
+            console.log(urlId.rows[0])
+            return res.status(302).redirect(urlId.rows[0].shortUrl);
+        } else {
+            return res.status(404).send('Não existe esta URL.');
+        }
     } catch (err) {
-      return res.status(500).send(err.message);
+        return res.status(500).send(err.message);
     }
-  });
-  
-  
+});
+
+
 
 app.get('/users/me', async (req, res) => {
 
@@ -276,6 +276,41 @@ app.get('/users/me', async (req, res) => {
     }
 });
 
+
+app.delete('/urls/:id', async (req, res) => {
+    const { id } = req.params
+    if (!token) {
+        return res.status(403).send('precisa ter o token')
+    }
+
+    try {
+
+
+        ///VERIFICA SE A ID EXISTE
+        const verifyId = await db.query('SELECT * FROM urls where id = $1;', [id])
+
+        if (verifyId.rows.length > 0 ) {
+
+        ///verificar se o cara pode deletar a coisa. se ele é criador.
+        const verifyDelPermission = await db.query('SELECT urls.id, urls."shortUrl", urls.url, urls.visitcount FROM urls JOIN users ON urls.creator = users.email WHERE urls.id = $1;', [id])
+
+        if (verifyDelPermission.rows.length > 0) {
+
+            const del = await db.query('delete from urls where id = $1;', [id])
+
+            return res.status(204).send('Link deletado!')
+        } else {
+            return res.status(401).send('Não pode deletar o link de outro usuário')
+        }
+    } else {
+        return res.status(404).send('ID NÃO ENCONTRADA!')
+    }
+
+    } catch (err) {
+        return res.status(500).send(err.message)
+
+    }
+})
 
 
 app.post('/teste', async (req, res) => {
