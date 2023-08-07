@@ -2,6 +2,7 @@
 import bcrypt from "bcrypt";
 import { db } from "../databases/database.connections.js";
 import createUser from "../schemas/createUser.schema.js";
+import loginUser from "../schemas/loginUser.schema.js";
 import dayjs from "dayjs";
 
 const createdAt = dayjs().format('YYYY-MM-DD HH:mm:ss');
