@@ -36,4 +36,42 @@ const createUserfunc = async (req, res) => {
     }
 };
 
+
+const signInUser = async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        // Validação do corpo da requisição usando o schema loginUser
+        const validation = loginUser.validate({ email, password }, { abortEarly: false });
+        if (validation.error) {
+            const errors = validation.error.details.map((detail) => detail.message);
+            return res.status(422).json(errors);
+        }
+
+        const userVerify = await db.query('SELECT * FROM USERS where email = $1', [email]);
+        console.log(userVerify.rows)
+        if (userVerify.rows.length > 0) {
+
+            const decrypt = bcrypt.compareSync(password, userVerify.rows[0].password);
+
+            if (decrypt === true) {
+                console.log('Usuário logado!');
+                const token = uuid();
+                const creatorToken = await db.query('UPDATE users set token = $1 where email = $2;', [token, email]);
+                return res.status(200).send({ token: token });
+            } else {
+                console.log('Senha incorreta');
+                return res.status(401).send('Senha incorreta!');
+            }
+        } else {
+            console.log('Email incorreto');
+            return res.status(401).send('Email incorreto!');
+        }
+    } catch (err) {
+        return res.status(500).send(err.message);
+    }
+};
+
+export { signInUser };
+
 export { createUserfunc };
